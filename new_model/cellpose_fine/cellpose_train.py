@@ -16,7 +16,7 @@ def check_masks(mask_dir):
         print(f"{mask_file.name}: 细胞数量 = {num_cells}")
         if num_cells < 1:
             print(f"  警告：{mask_file.name} 无有效细胞！")
-train_dir = '/media/Data1/user/hedongdong/wqs/00.code/data/pro/train_1'
+train_dir = '/media/Data1/user/hedongdong/wqs/00.code/data/train_data/train_0'
 model_path = '/media/Data1/user/hedongdong/wqs/00.code/data/weight/cellpose'
 
 # check_masks(train_dir)
@@ -25,10 +25,10 @@ model_path = '/media/Data1/user/hedongdong/wqs/00.code/data/weight/cellpose'
 use_GPU = core.use_gpu()
 
 
-initial_model = 'cyto3'
-epochs = 1000
+initial_model = 'cyto'
+epochs = 10000
 Use_Default_Advanced_Parameters = True
-learning_rate = 0.1
+learning_rate = 0.01
 weight_decay = 0.0001
 
 # start logger (to see training across epochs)
@@ -38,7 +38,7 @@ logger = io.logger_setup()
 model = models.CellposeModel(gpu=use_GPU, model_type=initial_model)
 
 # get files
-output = io.load_train_test_data(train_dir, mask_filter = '_masks')
+output = io.load_train_test_data(train_dir, mask_filter = '_mask')
 train_data, train_labels, _, _, _, _= output
 
 print(len(train_data))
@@ -46,14 +46,13 @@ print(len(train_labels))
 out = train.train_seg(model.net,
                               train_data=train_data,
                               train_labels=train_labels,
-                              batch_size=16,
+                              batch_size=32,
                               learning_rate=learning_rate,
                               n_epochs=epochs,
                               weight_decay=weight_decay,
                               SGD=True,
                             channels = [0,0],
-                              save_path=model_path,
-                            min_train_masks = 1,
+                            save_path=model_path,
 )
 
-print(new_model_path)
+# print(new_model_path)
