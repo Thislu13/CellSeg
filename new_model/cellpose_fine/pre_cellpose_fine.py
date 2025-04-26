@@ -1,69 +1,68 @@
-import os, shutil
+import os
+import argparse
 import numpy as np
-import matplotlib.pyplot as plt
-from cellpose import core, utils, io, models, metrics, train
-from glob import glob
-from pathlib import Path
 import cv2
+from cellpose import models, io
 
 
-diameter = 0
-flow_threshold = 0.4
-cellprob_threshold = 0
+def process_images(model_path, input_dir, output_dir, diameter=0, flow_threshold=0.4, cellprob_threshold=0):
+    """Main processing function to run Cellpose model and save results"""
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
 
-model_path= '/media/Data1/user/hedongdong/wqs/00.code/data/weight/cellpose/models/cellpose_1000'
-dir = '/media/Data1/user/hedongdong/wqs/00.code/data/train_data/raw_data/test/image'
-out_dir = '/media/Data1/user/hedongdong/wqs/00.code/data/out/eval/train_1'
+    # Load model
+    model = models.CellposeModel(gpu=True, pretrained_model=model_path)
 
-files = io.get_image_files(dir, mask_filter='_mask')
-# print(files)
-images = [io.imread(f) for f in files]
-# print(len(files))
-# print(files[0])
-# exit()
+    # Use model diameter if diameter is 0
+    diameter = model.diam_labels if diameter == 0 else diameter
 
+    # Get input files and images
+    files = io.get_image_files(input_dir, mask_filter='_mask')
+    images = [io.imread(f) for f in files]
 
+    # Run model
+    masks, flows, styles = model.eval(
+        images,
+        channels=[0, 0],
+        diameter=diameter,
+        flow_threshold=flow_threshold,
+        cellprob_threshold=cellprob_threshold
+    )
 
-model = models.CellposeModel(gpu=True, pretrained_model=model_path)
+    # Save masks
+    for i in range(len(masks)):
+        mask = masks[i]
+        file = os.path.basename(files[i])
+        save_path = os.path.join(output_dir, file)
 
-diameter = model.diam_labels if diameter == 0 else diameter
+        save_mask = np.zeros_like(mask).astype(np.uint8)
+        save_mask[mask > 0] = 255
 
-masks, flows, styles = model.eval(
-    images,
-    channels=[0,0],
-    diameter=diameter,
-    flow_threshold=flow_threshold,
-    cellprob_threshold=cellprob_threshold
-)
-
-
-print(len(masks))
-print(masks[0].shape)
-
-for i in range(len(masks)):
-    mask = masks[i]
-    file = files[i].split('/')[-1]
-    # print(file)
-
-    save_path = os.path.join(out_dir, file)
+        print(f"Saving: {save_path}")
+        cv2.imwrite(save_path, save_mask)
 
 
-    save_mask = np.zeros_like(mask).astype(np.uint8)
-    save_mask[mask > 0] = 255
+def main():
+    """Entry point of the script"""
+    args = parse_arguments()
+    process_images(
+        model_path=args.model_path,
+        input_dir=args.input_dir,
+        output_dir=args.output_dir,
+    )
 
-    print(save_path)
-    cv2.imwrite(save_path, save_mask)
 
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(description='Run Cellpose model on input images.')
+    parser.add_argument('--model_path', required=True, help='Path to the Cellpose model')
+    parser.add_argument('--input_dir', required=True, help='Directory containing input images')
+    parser.add_argument('--output_dir', required=True, help='Directory to save output masks')
+    parser.add_argument('--diameter', type=float, default=0, help='Cell diameter (0 for automatic)')
+    parser.add_argument('--flow_threshold', type=float, default=0.4, help='Flow threshold')
+    parser.add_argument('--cellprob_threshold', type=float, default=0, help='Cell probability threshold')
 
-# io.save_masks(images,
-#               masks,
-#               flows,
-#               files,
-#               channels=[0, 0],
-#               png=True, # save masks as PNGs and save example image
-#               tif=True, # save masks as TIFFs
-#               save_txt=False, # save txt outlines for ImageJ
-#               save_flows=False, # save flows as TIFFs
-#               save_outlines=False, # save outlines as TIFFs
-#               save_mpl=True # make matplotlib fig to view (WARNING: SLOW W/ LARGE IMAGES)
-#               )
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    main()
