@@ -19,7 +19,7 @@ import pandas as pd
 import subprocess
 
 work_path = os.path.abspath('.')
-cellmorphology_PY = os.path.join(work_path,'eval/cellmorphology/maskanalysis.py')
+cellmorphology_PY = os.path.join(work_path,'cellmorphology/maskanalysis.py')
 
 def sub_run(cmd):
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -233,7 +233,11 @@ def main(args, para):
         'deepcell': '#17becf',
         'v3': '#bcbd22',
         'lt': '#e377c2',
-        'cellpose2': '#7f7f7f'
+        'cellpose2': '#7f7f7f',
+        'cellpose_fine': '#98df8a',# 浅绿色
+        'fine_all': '#59a14f',  # 青绿色
+        'fine_boundary': '#c5b0d5',  # 浅紫色
+        'fine_intensity': '#ffbb78'  # 浅橙色
     }
 
     # 需要的排序顺序
@@ -247,7 +251,11 @@ def main(args, para):
         'deepcell',
         'v3',
         'lt',
-        'cellpose2'
+        'cellpose2',
+        'cellpose_fine',
+        'fine_all',
+        'fine_boundary',
+        'fine_intensity'
     ]
 
     # 根据 order 列表排序字典
