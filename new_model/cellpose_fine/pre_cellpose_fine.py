@@ -55,9 +55,9 @@ def main():
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description='Run Cellpose model on input images.')
-    parser.add_argument('--model_path', required=True, help='Path to the Cellpose model')
-    parser.add_argument('--input_dir', required=True, help='Directory containing input images')
-    parser.add_argument('--output_dir', required=True, help='Directory to save output masks')
+    parser.add_argument('-m','--model_path', required=True, help='Path to the Cellpose model')
+    parser.add_argument('-i','--input_dir', required=True, help='Directory containing input images')
+    parser.add_argument('-o','--output_dir', required=True, help='Directory to save output masks')
     parser.add_argument('--diameter', type=float, default=0, help='Cell diameter (0 for automatic)')
     parser.add_argument('--flow_threshold', type=float, default=0.4, help='Flow threshold')
     parser.add_argument('--cellprob_threshold', type=float, default=0, help='Cell probability threshold')
