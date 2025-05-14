@@ -78,3 +78,5 @@ python new_model/cellpose_fine/pre_cellpose_fine.py -m model_path -i input_dir -
 >  [stardist](https://github.com/stardist/stardist)  
 >
 >  [cellprofiler](https://github.com/CellProfiler)  
+>
+> [cs-benchmark](https://github.com/STOmics/cs-benchmark)
