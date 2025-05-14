@@ -238,7 +238,8 @@ def main(args, para):
         'fine_all': '#59a14f',  # 青绿色
         'fine_boundary': '#c5b0d5',  # 浅紫色
         'fine_intensity': '#ffbb78',  # 浅橙色
-        'cellpose_all_2':'#4e79a7' #深蓝色
+        'cellpose_all_2':'#4e79a7', #深蓝色
+        'cellpose_all_2_pro':'#17becf'
     }
 
     # 需要的排序顺序
@@ -257,7 +258,8 @@ def main(args, para):
         'fine_boundary',
         'fine_intensity',
         'fine_all',
-        'cellpose_all_2'
+        # 'cellpose_all_2',
+        'cellpose_all_2_pro'
     ]
 
     # 根据 order 列表排序字典
@@ -305,6 +307,6 @@ if __name__ == '__main__':
     (para, args) = parser.parse_known_args()
     print(para, args)
     para.func(para, args)
-    cellmorphology(para.gt_path,para.output_path)
+    # cellmorphology(para.gt_path,para.output_path)
 
 

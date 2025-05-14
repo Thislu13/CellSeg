@@ -31,9 +31,9 @@ def f_fillHole(im_in):
 
 
 models = {
-    "Mesmer": os.path.join(os.path.abspath('.'), "src/methods/models/MultiplexSegmentation"),  
-    "Nuclear": os.path.join(os.path.abspath('.'), "src/methods/models/NuclearSegmentation"),   
-    "Cytoplasm": os.path.join(os.path.abspath('.'), "src/methods/models/CytoplasmSegmentation"),   
+    "Mesmer": os.path.join(os.path.abspath('.'), "old_model/models/MultiplexSegmentation"),
+    "Nuclear": os.path.join(os.path.abspath('.'), "old_model/models/NuclearSegmentation"),
+    "Cytoplasm": os.path.join(os.path.abspath('.'), "old_model/models/CytoplasmSegmentation"),
 }
 
 

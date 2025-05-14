@@ -198,7 +198,7 @@ def run(file_lst, out_path, sam_checkpoint, device):
     model_type = "vit_b"
     device = device
     work_path = os.path.abspath('.')
-    sam_checkpoint = os.path.join(work_path,'src/methods/models/sam_vit_b_01ec64.pth')
+    sam_checkpoint = os.path.join(work_path,'old_model/models/sam_vit_b_01ec64.pth')
     sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
     sam.to(device=device)
     mask_generator = SamAutomaticMaskGenerator(sam)
